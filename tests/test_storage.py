@@ -11,7 +11,7 @@ class TestSimpleStorage(TestCase):
 
     @mock.patch.object(simple, 'datetime', mock.Mock(wraps=datetime))
     def test_log_stats(self):
-        simple.datetime.datetime.utcnow.return_value = datetime.datetime(
+        simple.datetime.datetime.now.return_value = datetime.datetime(
                 2018, 5, 9, 16, 0, 42, tzinfo=datetime.timezone.utc)
         entry1 = text.HTTPLogEntry(
             '127.0.0.1',

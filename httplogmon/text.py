@@ -2,8 +2,7 @@
 import datetime
 import re
 
-# Regular expression for parsing an HTTP log line.
-# TODO Make some of these matches more specific - date format, request method,
+# Regular expression for parsing an HTTP log line.  # TODO Make some of these matches more specific - date format, request method,
 # etc, or handle that in the HTTPLogEntry constructor
 # TODO Use named groups.
 # TODO Don't use regexp; parse in 1 pass.
@@ -86,6 +85,7 @@ def parse_http_log_line(line):
 
        :raises HTTPLogParseError
     """
+    line = line.strip()
     match = re.fullmatch(HTTP_LOG_LINE_REGEXP, line)
     if match is None:
         raise HTTPLogParseError(f'HTTP log entry is malformatted: {line}')

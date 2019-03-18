@@ -40,9 +40,17 @@ class SimpleLogStorage:
                 return
             entries.popleft()
 
+    def add_alert(self, alert):
+        self.active_alert = alert
+
+    def stop_alert(self):
+        if self.active_alert:
+            self.old_alerts.append(self.active_alert)
+            self.active_alert = None
+
     def stats_and_purge(self):
         stats = {}
-        now = datetime.datetime.utcnow(datetime.timezone.utc)
+        now = datetime.datetime.now(datetime.timezone.utc)
 
         # purge any stale log data. deque stays sorted assuming logs are in
         # order by timestamp
@@ -72,7 +80,7 @@ class SimpleLogStorage:
         return LogStats(**stats)
 
     def add_log_entry(self, entry):
-        now = datetime.datetime.utcnow(datetime.timezone.utc)
+        now = datetime.datetime.now(datetime.timezone.utc)
         tdelta = now - entry.timestamp
 
         two_minute_delta = datetime.timedelta(minutes=2)

@@ -19,6 +19,8 @@ class LogStorage(abc.ABC):
 
            Also remove stale entries from the cache and alert if request count
            exceeds a certain threshold.
+
+           :returns httplogmon.storage.stats.LogStats
         """
 
 

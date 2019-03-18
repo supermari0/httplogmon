@@ -9,5 +9,5 @@ and alerts
 
 ```
 # from root dir
-pip3 install .
+pip3 install -e .
 ```

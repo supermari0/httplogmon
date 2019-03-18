@@ -1,4 +1,5 @@
 import datetime
+from httplogmon.text import HTTP_LOG_TIME_FORMAT
 
 
 class RequestCountAlert:
@@ -9,8 +10,8 @@ class RequestCountAlert:
 
            :param float rps: Average requests per second.
         """
-        self.start = datetime.datetime.utcnow(tzinfo=datetime.timezone.utc)
-        self.active = True
+        self.start = datetime.datetime.now(datetime.timezone.utc)
+        self.end = None
         self.current_rps = rps
         self.peak_rps = rps
 
@@ -25,5 +26,10 @@ class RequestCountAlert:
 
     def close(self):
         """Close the alert."""
-        self.active = False
         self.end = datetime.datetime.utcnow(tzinfo=datetime.timezone.utc)
+
+    def __str__(self):
+        rep = 'ALERT START: ' + self.start.strftime(HTTP_LOG_TIME_FORMAT)
+        rep += ', Current average requests/second: ' + str(self.current_rps)
+        rep += ', peak average requests/second: ' + str(self.peak_rps)
+        return rep

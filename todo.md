@@ -1,0 +1,4 @@
+- write an alert test
+- dockerize
+- pep8/remove print debugging
+- done!
