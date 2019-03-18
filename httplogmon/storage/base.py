@@ -1,6 +1,9 @@
 """Base class for storage of log data."""
 import abc
 
+from httplogmon.storage.simple import SimpleLogStorage
+
+
 class LogStorage(abc.ABC):
 
     @abc.abstractmethod
@@ -10,15 +13,13 @@ class LogStorage(abc.ABC):
            :param httplogmon.text.HTTPLogEntry entry
         """
 
-class SimpleLogStorage:
+    @abc.abstractmethod
+    def stats_and_purge(self):
+        """Retrieve interesting statistics about log entries.
 
-    # TODO You don't want to actually store all the log entries in mem, just
-    # update stats
-    def __init__(self):
-        self.log_entries = []
-
-    def add_log_entry(self, entry):
-        self.log_entries.append(entry)
+           Also remove stale entries from the cache and alert if request count
+           exceeds a certain threshold.
+        """
 
 
 LogStorage.register(SimpleLogStorage)

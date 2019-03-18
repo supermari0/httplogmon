@@ -6,7 +6,7 @@ import re
 # TODO Make some of these matches more specific - date format, request method,
 # etc, or handle that in the HTTPLogEntry constructor
 # TODO Use named groups.
-
+# TODO Don't use regexp; parse in 1 pass.
 HTTP_LOG_LINE_REGEXP = (r'^(.+) - (.+) \[(.+)\] \"([A-Z]+) (\/.*) .+\" '
                         r'([0-9]{3}) ([0-9]+)$')
 
@@ -51,8 +51,20 @@ class HTTPLogEntry:
         # TODO In addition to "path", track "section" as defined in the problem
         # TODO Convert status, n_bytes to ints
         self.path = path
-        self.status = status
-        self.n_bytes = n_bytes
+        split_path = path.split('/')
+        if len(split_path) >= 2:
+            self.section = '/' + split_path[1]
+        else:
+            self.section = '/'
+
+        try:
+            self.status = int(status)
+        except ValueError:
+            raise HTTPLogParseError(f'HTTP status code format error: {status}')
+        try:
+            self.n_bytes = int(n_bytes)
+        except ValueError:
+            raise HTTPLogParseError(f'HTTP resp size format error: {n_bytes}')
 
     def __str__(self):
         return str(self.__dict__)
@@ -60,9 +72,11 @@ class HTTPLogEntry:
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
 
+
 class HTTPLogParseError(Exception):
     """Raised when an HTTP log entry cannot be parsed correctly."""
     pass
+
 
 def parse_http_log_line(line):
     """Parse an HTTP access log line and return useful data.
