@@ -1,4 +1,4 @@
-from httplogmon.lib import text
+from httplogmon import text
 
 import unittest
 
