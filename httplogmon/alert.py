@@ -26,7 +26,7 @@ class RequestCountAlert:
 
     def close(self):
         """Close the alert."""
-        self.end = datetime.datetime.utcnow(tzinfo=datetime.timezone.utc)
+        self.end = datetime.datetime.now(datetime.timezone.utc)
 
     def __str__(self):
         rep = 'ALERT START: ' + self.start.strftime(HTTP_LOG_TIME_FORMAT)

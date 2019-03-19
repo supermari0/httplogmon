@@ -24,23 +24,17 @@ def monitor_logs(storage):
 
 def update_and_print_alerts(stats, storage):
     # TODO
-    # - Write a test and Dockerize
-    print("Priting alerts...")
+    # - Run through the code and TODOS, PEP8, Dockerize
     should_alert = (stats.rps_two_minutes >= conf.RPS_ALERT_THRESOLD)
     if storage.active_alert and should_alert:
-        print("updating alert")
         storage.active_alert.update(stats.rps_two_minutes)
         print("Active alert: " + str(storage.active_alert))
     elif storage.active_alert:
-        print('stopping alert')
         storage.stop_alert()
         print("Alert cleared!")
     elif should_alert:
-        print('makin new alert')
         alert = RequestCountAlert(stats.rps_two_minutes)
-        print('new alert made')
         storage.add_alert(alert)
-        print('added to storage')
         print("New alert: " + str(storage.active_alert))
     print('')
     print('Historical alerts:')
@@ -71,7 +65,6 @@ def display_stats_and_check_alerts(current_time, storage):
 
 
 def display_loop(storage):
-    # TODO Replace mocked out calls to utcnow to call now as below instead.
     previous_display = (datetime.datetime.now(datetime.timezone.utc)
                         - datetime.timedelta(seconds=10))
     while True:
