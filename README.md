@@ -7,12 +7,30 @@ and alerts
 
 ### Running
 
-TODO add docker run instructions (build + run with gendata, without)
+With Docker:
 
 ```
-# from root dir
-pip3 install -e .
+$ cd httplogmon
+$ sudo docker build .
+// run interactively so you can see output
+$ sudo docker run -ti <docker_image_hash>
 ```
+
+The above will generate log data to show the alerting behavior. To start with
+an empty log, replace the docker run command above with:
+
+```
+sudo docker run -e GENDATA=false <docker_image_hash>
+```
+
+To run unit tests, replace the entrypoint with `/usr/src/run-tests.sh`.
+
+```
+$ sudo docker run --entrypoint "/usr/src/run-tests.sh" -it 16e8dd
+```
+
+You can edit the config in `httplogmon/main.py`, but this will require a new
+Docker build.
 
 # How I'd Improve the Program
 
@@ -20,6 +38,7 @@ Given more time, I might do some of the following:
 
 - Allow configuration as environment variables. Currently, config is just
   stored in a Python module, so reconfiguration requires an image rebuild.
+- Enforce PEP8 style.
 - Move core alerting logic out of the main module into a separate module,
   similarly to what I've done with the storage modules.
   - Add alert/incident UUIDs.
