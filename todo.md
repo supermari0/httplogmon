@@ -1,4 +1,4 @@
-- write an alert test
-- dockerize
-- pep8/remove print debugging
-- done!
+- pep8
+- test out dockerfile and address TODO there
+- try to run it again, make sure stuff works
+- submit before deadline!

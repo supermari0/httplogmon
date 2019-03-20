@@ -2,14 +2,12 @@
 import datetime
 import re
 
-# Regular expression for parsing an HTTP log line.  # TODO Make some of these matches more specific - date format, request method,
-# etc, or handle that in the HTTPLogEntry constructor
-# TODO Use named groups.
+# Regular expression for parsing an HTTP log line.
 # TODO Don't use regexp; parse in 1 pass.
 HTTP_LOG_LINE_REGEXP = (r'^(.+) - (.+) \[(.+)\] \"([A-Z]+) (\/.*) .+\" '
                         r'([0-9]{3}) ([0-9]+)$')
 
-# TODO The locale's abbreviated month (Jan, Feb, ..., May, ...) is used
+# NOTE The locale's abbreviated month (Jan, Feb, ..., May, ...) is used
 # for the month format. This can be configured by the web server. This
 # won't work if the system locale is misconfigured or if the full month
 # is used. However, this should work with default Apache settings if
@@ -47,8 +45,6 @@ class HTTPLogEntry:
                                     f'{timestamp}')
         self.method = method
 
-        # TODO In addition to "path", track "section" as defined in the problem
-        # TODO Convert status, n_bytes to ints
         self.path = path
         split_path = path.split('/')
         if len(split_path) >= 2:

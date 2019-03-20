@@ -10,15 +10,6 @@ class SimpleLogStorage:
        This class does not cache any statistics about the log data.
     """
 
-    # TODO You don't want to actually store all the log entries in mem, just
-    # update stats
-    # Required:
-    # - Sections with most hits
-    # - 2 minute window of counts cached
-    # - Average requests per second
-    # Interesting statistics:
-    # - Requests per second, % of responses by code, median response size,
-    # total kB transferred
     def __init__(self):
         # Deques have append and pop O(1) from either direction, use this
         # instead of a list
@@ -45,6 +36,7 @@ class SimpleLogStorage:
 
     def stop_alert(self):
         if self.active_alert:
+            self.active_alert.close()
             self.old_alerts.append(self.active_alert)
             self.active_alert = None
 
@@ -74,8 +66,6 @@ class SimpleLogStorage:
         stats['counts_by_section'] = counts_by_section
         stats['counts_by_response_code'] = counts_by_response_code
         stats['bytes_sent'] = bytes_sent
-
-        # TODO Add the alert?
 
         return LogStats(**stats)
 

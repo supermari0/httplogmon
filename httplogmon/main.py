@@ -1,6 +1,6 @@
 from httplogmon import conf
 from httplogmon.storage.simple import SimpleLogStorage
-from httplogmon.text import parse_http_log_line
+from httplogmon.text import parse_http_log_line, HTTP_LOG_TIME_FORMAT
 from httplogmon.alert import RequestCountAlert
 
 from concurrent.futures import ThreadPoolExecutor
@@ -23,19 +23,20 @@ def monitor_logs(storage):
 
 
 def update_and_print_alerts(stats, storage):
-    # TODO
-    # - Run through the code and TODOS, PEP8, Dockerize
     should_alert = (stats.rps_two_minutes >= conf.RPS_ALERT_THRESOLD)
     if storage.active_alert and should_alert:
         storage.active_alert.update(stats.rps_two_minutes)
         print("Active alert: " + str(storage.active_alert))
     elif storage.active_alert:
+        clear_time = datetime.datetime.now(datetime.timezone.utc)
         storage.stop_alert()
         print("Alert cleared!")
+        print("Recovery occurred at " +
+              clear_time.strftime(HTTP_LOG_TIME_FORMAT))
     elif should_alert:
         alert = RequestCountAlert(stats.rps_two_minutes)
         storage.add_alert(alert)
-        print("New alert: " + str(storage.active_alert))
+        print("New alert: \n" + str(storage.active_alert))
     print('')
     print('Historical alerts:')
     for alert in storage.old_alerts:
