@@ -7,6 +7,8 @@ and alerts
 
 ### Running
 
+TODO add docker run instructions (build + run with gendata, without)
+
 ```
 # from root dir
 pip3 install -e .
@@ -16,6 +18,8 @@ pip3 install -e .
 
 Given more time, I might do some of the following:
 
+- Allow configuration as environment variables. Currently, config is just
+  stored in a Python module, so reconfiguration requires an image rebuild.
 - Move core alerting logic out of the main module into a separate module,
   similarly to what I've done with the storage modules.
   - Add alert/incident UUIDs.
